@@ -29,7 +29,8 @@ def get_sum_freqs_squared(input_text):
     
     return sum_freqs_squared
 
-
+def shiftBy(c, n):
+    return chr(((ord(c) - ord('a') + n) % 26) + ord('a'))
 
 print(get_sum_freqs_squared(text))
 
@@ -51,15 +52,22 @@ for key_length in range(10, 21):
             string_to_test += text[index2]
         #print(string_to_test)
         strings_to_test.append(string_to_test)
+    
+    print("Num strings: " + str(len(strings_to_test)))
 
     # for this substring, try all shift amounts and print the one that is closest match to .65 frequency
     
+
+    key_test = []
     
     for string in strings_to_test:
         #print("String testing: " + string)
         possible_shifts = []
 
+        best_shift = 0
+        best_freq = 1
         for num_shift in range(1, 27):
+
             local_string = string
             newText = ""
             for character in local_string:
@@ -74,12 +82,32 @@ for key_length in range(10, 21):
                 newText += newChar
 
             freq = get_sum_freqs_squared(newText)
-            if(abs(freq - .065) < .005):
-                #print("Key Length: " + str(key_length))
-                #print("Shift Amount: " + str(num_shift))
-                #print("New Text: " + newText)
-                #print("Frequency: " + str(freq))
-                possible_shifts.append(num_shift)
-        
-        if(possible_shifts):
-            print(possible_shifts)
+
+            if(abs(freq - .065) < abs(best_freq - .065)):
+               best_freq = freq
+               best_shift = num_shift
+
+        #print("Best shift and freqency:")
+        #print(best_shift)
+        #print(best_freq)
+
+        key_test.append(best_shift)
+
+
+    print(key_test)
+
+
+    print("Trying it out!")
+
+    newText = ""
+    index = 0
+    for c in text:
+        index_mod = index % key_length
+        newChar = shiftBy(c, key_test[index_mod])
+        newText += newChar
+        index += 1
+
+    freq = get_sum_freqs_squared(newText)
+    print(freq)
+
+
