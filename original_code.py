@@ -12,8 +12,6 @@ words = res.read().split()
 random.shuffle(quotes)
 random.shuffle(words)
 
-print(words)
-
 def substitution(plaintext):
     letters = range(26)
     random.shuffle(letters)
