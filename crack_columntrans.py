@@ -12,7 +12,7 @@ lines = [l.strip() for l in f] # should just be one
 text = lines[0]
 
 
-print("Original Text: " + text)
+print(text)
 print()
 
 best_fittness = 0
@@ -22,20 +22,22 @@ best_key_length = 0
 # First runthrough, 16 was clearly the key length
 for key_length in range(8, 10):
 
-    columns = [""]*key_length
+    columns = [""]*(key_length)
 
     index = 0
     for c in text:
         columns[index] += c
         index = (index+1) % key_length
 
+    print(columns)
+    print(len(columns))
     columnOrder = range(0, key_length)
 
     fails = 0
 
     local_best_fittness = 0
     local_best_text = ""
-    while(fails < 1000):
+    while(fails < 10000):
 
         before_text = ""
 
@@ -44,7 +46,7 @@ for key_length in range(8, 10):
 
         before_fittness = fittness.getFitness(before_text)
 
-        print(columnOrder)
+        #print(columnOrder)
 
         random_1 = random.randrange(0, key_length)
         random_2 = random.randrange(0, key_length)
@@ -54,7 +56,7 @@ for key_length in range(8, 10):
         columnOrder[random_1] = columnOrder[random_2]
         columnOrder[random_2] = temp
 
-        print(columnOrder)
+        #print(columnOrder)
         after_text = ""
         for colVal in columnOrder:
             after_text += columns[colVal]
