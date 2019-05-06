@@ -2,6 +2,9 @@
 
 # This is blackhat_2 because this already had distribution of english text
 
+# Cracked it!:
+
+# unwelcometruthsarenotpopularnooneisuselessinthisworldretortedthesecretarywholightenstheburdenofitforanyoneelseihavealwaysthoughtthatawildanimalneverlookssowellaswhensomeobstacleofpronounceddurabilityisbetweenusapersonalexperiencehasintensifiedratherthandiminishedthatideawhenyouvelearnedtolaughatthethingsthatshouldbelaughedatandnottolaughatthosethatshouldntyouvegotwisdomandunderstandingrichgiftswaxpoorwhengiversproveunkindtobeconsciousthatyouareignorantisagreatsteptoknowledgethereismanyayoungcockerelthatwillstanduponadunghillandcrowabouthisfatherbywayofmakinghisownplumagetoshine
 
 
 import fittness
@@ -19,17 +22,30 @@ best_fittness = 0
 best_text = ""
 best_key_length = 0
 
-# First runthrough, 16 was clearly the key length
-for key_length in range(8, 10):
+for key_length in range(8, 11):
 
     columns = [""]*(key_length)
 
     index = 0
-    for c in text:
-        columns[index] += c
-        index = (index+1) % key_length
 
+    print("Text Length: ")
+    print(len(text))
+    print(len(text) // key_length)
+    colLength = len(text) // key_length
+    for i in range(0, key_length):
+        columns[i] += text[index: index + colLength]
+        index+= colLength
+    
+    snippedText = text[index:]
+
+    newIndex = 0
+    for c in snippedText:
+        columns[newIndex] += c
+        index = index + 1 % key_length
+
+    print("Columns: ****************")
     print(columns)
+    print("*************************")
     print(len(columns))
     columnOrder = range(0, key_length)
 
@@ -37,12 +53,25 @@ for key_length in range(8, 10):
 
     local_best_fittness = 0
     local_best_text = ""
+
+    before_text_1 = ""
+    for i in range(0, len(columns[0])):
+        for colVal in columnOrder:
+            if(i < len(columns[colVal])):
+                before_text_1 += columns[colVal][i]
+
+    print("=============")
+    print(before_text_1)
+    print("=============")
+
     while(fails < 10000):
 
         before_text = ""
 
-        for colVal in columnOrder:
-            before_text += columns[colVal]
+        for i in range(0, len(columns[0])):
+            for colVal in columnOrder:
+                if(i < len(columns[colVal])):
+                    before_text += columns[colVal][i]
 
         before_fittness = fittness.getFitness(before_text)
 
@@ -58,8 +87,11 @@ for key_length in range(8, 10):
 
         #print(columnOrder)
         after_text = ""
-        for colVal in columnOrder:
-            after_text += columns[colVal]
+
+        for i in range(0, len(columns[0])):
+            for colVal in columnOrder:
+                if(i < len(columns[colVal])):
+                    after_text += columns[colVal][i]
 
         after_fittness = fittness.getFitness(after_text)
 
@@ -75,7 +107,10 @@ for key_length in range(8, 10):
             columnOrder[random_1] = columnOrder[random_2]
             columnOrder[random_2] = temp
     
-    
+    print("-----------------")
+    print(local_best_text)
+    print("-----------------")
+
     if(local_best_fittness > best_fittness):
         best_fittness = local_best_fittness
         best_text = local_best_text
